@@ -1,5 +1,6 @@
 using CustomerApp.Contracts;
 using CustomerApp.Services;
+using FluentValidation;
 
 namespace CustomerApp.Endpoints
 {
@@ -34,8 +35,15 @@ namespace CustomerApp.Endpoints
         }
 
         public static async Task<IResult> CreateCustomer(CustomerDto customerDto,
-            ICustomerService customerService)
+            IValidator<CustomerDto> validator, ICustomerService customerService)
         {
+            var result = await validator.ValidateAsync(customerDto);
+
+            if (!result.IsValid)
+            {
+                return Results.BadRequest(result.Errors.ToString());
+            }
+
             await customerService.CreateAsync(customerDto);
             
             return Results.Created($"/customers/{customerDto.Id}", customerDto);

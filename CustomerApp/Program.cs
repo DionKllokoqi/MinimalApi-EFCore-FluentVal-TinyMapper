@@ -2,6 +2,8 @@ using CustomerApp.Contracts;
 using CustomerApp.Domain;
 using CustomerApp.Endpoints;
 using CustomerApp.Infrastructure;
+using CustomerApp.Services;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Nelibur.ObjectMapper;
@@ -9,6 +11,8 @@ using Nelibur.ObjectMapper;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<CustomerDbContext>(options => options.UseInMemoryDatabase("customers"));
+builder.Services.AddScoped<ICustomerService, CustomerService>();
+builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c => 
