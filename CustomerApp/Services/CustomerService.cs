@@ -44,13 +44,20 @@ namespace CustomerApp.Services
         {
             var customers = await _dbContext.Customers!.ToListAsync();
 
-            return TinyMapper.Map<IEnumerable<CustomerDto>>(customers);
+            var customerDtos = new List<CustomerDto>();
+
+            foreach (var customer in customers)
+            {
+                customerDtos.Add(TinyMapper.Map<CustomerDto>(customer));
+            }
+
+            return customerDtos;
         }
 
         public async Task<CustomerDto?> GetByIdAsync(string Id)
         {
             var customer = await _dbContext.Customers!.FirstOrDefaultAsync(x => x.Id.ToString() == Id);
-            
+
             return TinyMapper.Map<CustomerDto>(customer);
         }
     }
