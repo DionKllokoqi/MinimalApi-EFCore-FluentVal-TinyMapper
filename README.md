@@ -1,0 +1,1 @@
+# Sample Minimal-API Project with Fluent Validatin, EF-Core and TinyMapper
