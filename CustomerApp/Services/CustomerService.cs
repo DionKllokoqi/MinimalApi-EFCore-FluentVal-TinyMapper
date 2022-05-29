@@ -18,24 +18,39 @@ namespace CustomerApp.Services
         public async Task CreateAsync(CustomerDto customerDto)
         {
             var customer = TinyMapper.Map<Customer>(customerDto);
+
             await _dbContext.Customers!.AddAsync(customer);
+
+            await _dbContext.SaveChangesAsync();
         }
 
-        public void DeleteAsync(CustomerDto customerDto)
+        public async Task<bool> DeleteAsync(Guid id)
         {
-            var customer = TinyMapper.Map<Customer>(customerDto);
+            var customer = await _dbContext.Customers!.FirstAsync(c => c.Id == id);
+
+            if (customer is null)
+            {
+                return false;
+            }
+
             _dbContext.Customers!.Remove(customer);
+
+            await _dbContext.SaveChangesAsync();
+
+            return true;
         }
 
         public async Task<IEnumerable<CustomerDto?>> GetAllAsync()
         {
             var customers = await _dbContext.Customers!.ToListAsync();
+
             return TinyMapper.Map<IEnumerable<CustomerDto>>(customers);
         }
 
         public async Task<CustomerDto?> GetByIdAsync(string Id)
         {
             var customer = await _dbContext.Customers!.FirstOrDefaultAsync(x => x.Id.ToString() == Id);
+            
             return TinyMapper.Map<CustomerDto>(customer);
         }
     }

@@ -8,6 +8,6 @@ namespace CustomerApp.Services
          Task<IEnumerable<CustomerDto?>> GetAllAsync();
          Task<CustomerDto?> GetByIdAsync(string Id);
          Task CreateAsync(CustomerDto customerDto);
-         void DeleteAsync(CustomerDto customerDto);
+         Task<bool> DeleteAsync(Guid id);
     }
 }
