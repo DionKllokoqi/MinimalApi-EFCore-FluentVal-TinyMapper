@@ -39,6 +39,10 @@ TinyMapper.Bind<CustomerDto, Customer>(config =>
 {
     config.Bind(source => source.EmailAddress, target => target.Email);
 });
+TinyMapper.Bind<Customer, CustomerDto>(config =>
+{
+    config.Bind(source => source.Email, target => target.EmailAddress);
+});
 
 app.ConfigureApi();
 
